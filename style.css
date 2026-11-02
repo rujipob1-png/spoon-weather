@@ -1,0 +1,607 @@
+/* ลงทะเบียนสีท้องฟ้าเป็นชนิด color เบราว์เซอร์จึงค่อย ๆ เปลี่ยนสีให้ได้ ไม่กระพริบตอนเปลี่ยนเมือง
+   เบราว์เซอร์ที่ไม่รู้จัก @property แค่เปลี่ยนสีทันที ไม่มีอะไรพัง */
+@property --sky-base { syntax: "<color>"; inherits: true; initial-value: #24242c; }
+@property --sky-1 { syntax: "<color>"; inherits: true; initial-value: #3d3d4a; }
+@property --sky-2 { syntax: "<color>"; inherits: true; initial-value: #30303a; }
+@property --sky-3 { syntax: "<color>"; inherits: true; initial-value: #474756; }
+@property --sky-4 { syntax: "<color>"; inherits: true; initial-value: #2a2a33; }
+
+:root {
+  --radius: 1.75rem;
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --font-display: "Kanit", "Leelawadee UI", "Noto Sans Thai", system-ui, sans-serif;
+  --font-body: "Anuphan", "Leelawadee UI", "Noto Sans Thai", system-ui, sans-serif;
+  --warning-bg: #ffe08a;
+  --warning-ink: #2b1d00;
+}
+
+/* สีทั้งหมดของแต่ละท้องฟ้าอยู่ที่นี่ data-sky ถูกตั้งจาก skyFor() ใน js/weather.js
+   --glass-solid ใช้แทนกระจกในเบราว์เซอร์ที่เบลอพื้นหลังไม่ได้ ตัวหนังสือจะได้ยังอ่านออก */
+body[data-sky="neutral"] {
+  color-scheme: dark;
+  --sky-base: #24242c;
+  --sky-1: #3d3d4a;
+  --sky-2: #30303a;
+  --sky-3: #474756;
+  --sky-4: #2a2a33;
+  --ink: #f6f6f9;
+  --ink-soft: #d6d6e0;
+  --glass: rgb(255 255 255 / 0.1);
+  --glass-solid: rgb(36 36 44 / 0.92);
+  --glass-border: rgb(255 255 255 / 0.18);
+  --accent: #e4ff6a;
+  --accent-ink: #1b1b22;
+}
+
+body[data-sky="clear"] {
+  color-scheme: light;
+  --sky-base: #ffd8b5;
+  --sky-1: #ff9a76;
+  --sky-2: #ffc46b;
+  --sky-3: #ff8fab;
+  --sky-4: #fff1c9;
+  --ink: #2b1006;
+  --ink-soft: #57260f;
+  --glass: rgb(255 255 255 / 0.45);
+  --glass-solid: rgb(255 240 225 / 0.92);
+  --glass-border: rgb(255 255 255 / 0.6);
+  --accent: #2b1006;
+  --accent-ink: #fff4e6;
+}
+
+body[data-sky="cloudy"] {
+  color-scheme: light;
+  --sky-base: #cfd9e8;
+  --sky-1: #a9bcd8;
+  --sky-2: #e6dcf2;
+  --sky-3: #f3e9e4;
+  --sky-4: #8fa9cc;
+  --ink: #121b2d;
+  --ink-soft: #27334a;
+  --glass: rgb(255 255 255 / 0.45);
+  --glass-solid: rgb(236 241 248 / 0.92);
+  --glass-border: rgb(255 255 255 / 0.6);
+  --accent: #121b2d;
+  --accent-ink: #f4f7fb;
+}
+
+body[data-sky="cloudy-night"] {
+  color-scheme: dark;
+  --sky-base: #161b2b;
+  --sky-1: #2c3650;
+  --sky-2: #232a40;
+  --sky-3: #39435f;
+  --sky-4: #1c2236;
+  --ink: #f1f4fa;
+  --ink-soft: #cdd5e4;
+  --glass: rgb(255 255 255 / 0.08);
+  --glass-solid: rgb(22 27 43 / 0.92);
+  --glass-border: rgb(255 255 255 / 0.16);
+  --accent: #9fe8ff;
+  --accent-ink: #0e1320;
+}
+
+body[data-sky="night"] {
+  color-scheme: dark;
+  --sky-base: #1a0f45;
+  --sky-1: #4a23a0;
+  --sky-2: #2e1670;
+  --sky-3: #6d2fd6;
+  --sky-4: #1a1f52;
+  --ink: #f7f3ff;
+  --ink-soft: #e4dcfd;
+  --glass: rgb(18 10 46 / 0.35);
+  --glass-solid: rgb(18 10 46 / 0.92);
+  --glass-border: rgb(255 255 255 / 0.16);
+  --accent: #e4ff6a;
+  --accent-ink: #160c33;
+}
+
+body[data-sky="rain"] {
+  color-scheme: dark;
+  --sky-base: #1b1a4d;
+  --sky-1: #4338ca;
+  --sky-2: #6d28d9;
+  --sky-3: #1d4ed8;
+  --sky-4: #312e81;
+  --ink: #f5f3ff;
+  --ink-soft: #dfdbff;
+  --glass: rgb(15 12 48 / 0.35);
+  --glass-solid: rgb(27 26 77 / 0.92);
+  --glass-border: rgb(255 255 255 / 0.2);
+  --accent: #d9ff5b;
+  --accent-ink: #14123a;
+}
+
+body[data-sky="storm"] {
+  color-scheme: dark;
+  --sky-base: #150f2a;
+  --sky-1: #4c1d95;
+  --sky-2: #be185d;
+  --sky-3: #1e1b4b;
+  --sky-4: #312e81;
+  --ink: #ffffff;
+  --ink-soft: #f3e8ff;
+  --glass: rgb(15 10 35 / 0.4);
+  --glass-solid: rgb(21 15 42 / 0.92);
+  --glass-border: rgb(255 255 255 / 0.2);
+  --accent: #ffe14d;
+  --accent-ink: #1a1033;
+}
+
+body[data-sky="snow"] {
+  color-scheme: light;
+  --sky-base: #dbeafe;
+  --sky-1: #bfdbfe;
+  --sky-2: #e0e7ff;
+  --sky-3: #f0f9ff;
+  --sky-4: #a5b4fc;
+  --ink: #14213d;
+  --ink-soft: #2b3a5e;
+  --glass: rgb(255 255 255 / 0.5);
+  --glass-solid: rgb(235 243 255 / 0.92);
+  --glass-border: rgb(255 255 255 / 0.7);
+  --accent: #14213d;
+  --accent-ink: #f0f9ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* กฎนี้ทำให้ hidden ซ่อนได้จริง ไม่งั้น display ที่เราเขียนเองจะชนะแล้วเกิดช่องว่างเกิน */
+[hidden] {
+  display: none !important;
+}
+
+html {
+  background: #24242c;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  /* ข้อความยาวที่ไม่มีช่องว่างต้องตัดบรรทัดได้ ไม่ดันหน้าเว็บให้กว้างเกินจอ */
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- ท้องฟ้า ---------- */
+
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--sky-base);
+  transition: --sky-base 0.8s, --sky-1 0.8s, --sky-2 0.8s, --sky-3 0.8s, --sky-4 0.8s;
+}
+
+/* วงสีเบลอ 4 วงซ้อนกันคือ mesh ส่วนที่ขยายเกินจอ (-30%) กันขอบโผล่ตอนมันหมุน */
+.sky::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(40% 40% at 25% 25%, var(--sky-1), transparent 70%),
+    radial-gradient(45% 45% at 78% 22%, var(--sky-2), transparent 70%),
+    radial-gradient(50% 50% at 70% 78%, var(--sky-3), transparent 70%),
+    radial-gradient(45% 45% at 20% 78%, var(--sky-4), transparent 70%);
+  filter: blur(40px);
+  animation: drift 26s ease-in-out infinite alternate;
+}
+
+/* ดาวมีเฉพาะกลางคืน ขนาดลายไม่เท่ากันเพื่อไม่ให้เห็นว่าลายซ้ำ */
+body[data-sky="night"] .sky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 30px 40px, #fff, transparent),
+    radial-gradient(1px 1px at 90px 120px, #fff, transparent),
+    radial-gradient(2px 2px at 150px 70px, #fff, transparent),
+    radial-gradient(1px 1px at 60px 180px, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 200px 210px, #fff, transparent),
+    radial-gradient(1px 1px at 240px 30px, #fff, transparent);
+  background-size: 173px 197px, 211px 233px, 257px 241px, 293px 271px, 317px 283px, 349px 307px;
+  animation: twinkle 5s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  to {
+    transform: rotate(16deg) scale(1.15) translate(3%, -2%);
+  }
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 0.9;
+  }
+}
+
+/* ---------- โครงหน้า ---------- */
+
+.app {
+  display: grid;
+  /* minmax(0, ...) ให้คอลัมน์หดตามจอได้ ไม่ขยายตามเนื้อหาที่ยาว */
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  gap: 0.875rem;
+  max-width: 64rem;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 2rem;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+h1 {
+  font: 800 clamp(1.75rem, 7vw, 2.25rem) / 1.15 var(--font-display);
+}
+
+.soft {
+  color: var(--ink-soft);
+}
+
+a {
+  color: inherit;
+  font-weight: 600;
+}
+
+/* กระจกฝ้า ไม่ใช้ saturate เพื่อให้สีที่ได้ไม่เกินช่วงที่คำนวณ contrast ไว้ */
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.12);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: var(--glass-solid);
+  }
+}
+
+/* ---------- ปุ่มและช่องค้นหา ---------- */
+
+button,
+input {
+  min-height: 2.75rem;
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  padding: 0 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.25s var(--spring);
+}
+
+button:active {
+  transform: scale(0.93);
+}
+
+button[aria-disabled="true"] {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+:is(button, input, a, h2):focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.search-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  /* ใช้ 2rem แทน 999px เพื่อไม่ให้กล่องกลายเป็นวงรีตอนปุ่มตกลงมาอีกแถว */
+  border-radius: 2rem;
+}
+
+.search-row input {
+  flex: 1 1 9rem;
+  min-width: 0;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.search-row input::placeholder {
+  color: var(--ink-soft);
+  opacity: 1;
+}
+
+.search-row input:focus-visible {
+  outline-offset: -3px;
+}
+
+.chip {
+  justify-self: start;
+  background: var(--glass);
+  color: var(--ink);
+  border-radius: 2rem;
+}
+
+.results {
+  display: grid;
+  gap: 0.375rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.results button {
+  width: 100%;
+  padding: 0.5rem 1.25rem;
+  border-radius: 1.25rem;
+  background: var(--glass);
+  color: var(--ink);
+  text-align: left;
+}
+
+.results small {
+  display: block;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+.note {
+  padding: 0 0.25rem;
+  font-weight: 500;
+}
+
+.warning {
+  padding: 0.625rem 1rem;
+  border-radius: 1.25rem;
+  background: var(--warning-bg);
+  color: var(--warning-ink);
+  font-weight: 500;
+}
+
+/* ---------- Bento ---------- */
+
+.bento {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.875rem;
+}
+
+.hero {
+  /* ให้ขนาดเลขอุณหภูมิคิดจากความกว้างของการ์ดนี้ ไม่ใช่จอ เลขจึงไม่ล้นการ์ดแม้ขยายตัวอักษร */
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: space-between;
+  gap: 1.5rem 1rem;
+  /* ใช้ min() เพื่อไม่ให้ขอบกินพื้นที่บนจอแคบเมื่อขยายตัวอักษร */
+  padding: min(1.5rem, 6vw);
+  min-height: 22rem;
+}
+
+/* การ์ดแคบมากจนวางชื่อเมืองคู่กับไอคอนไม่พอ ให้ชื่อเมืองเต็มแถว ไม่งั้นชื่อถูกตัดทีละ 2-3 ตัวอักษร */
+@container (max-width: 14rem) {
+  .hero > div:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+.hero h2 {
+  font: 600 1.5rem / 1.25 var(--font-display);
+  border-radius: 0.5rem;
+}
+
+.icon {
+  font-size: 4.5rem;
+  font-size: min(24cqi, 6.5rem);
+  line-height: 1;
+  filter: drop-shadow(0 10px 18px rgb(0 0 0 / 0.2));
+  animation: float 5s ease-in-out infinite alternate;
+}
+
+.reading {
+  grid-column: 1 / -1;
+}
+
+.temperature {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: min(22vw, 8rem);
+  font-size: min(33cqi, 11rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.condition {
+  margin-top: 0.5rem;
+  font: 600 1.25rem / 1.3 var(--font-display);
+}
+
+/* ใช้ flex-wrap: กล่องเล็กยืดเต็มแถวเสมอ และถ้าขยายตัวอักษรจนวาง 2 กล่องไม่พอ จะลงคนละแถวเอง
+   เพราะ 8rem ใหญ่ขึ้นตามตัวอักษร */
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin: 0;
+}
+
+.tile {
+  flex: 1 1 8rem;
+  min-width: 0;
+  padding: 1rem 1.125rem;
+}
+
+.tile dt {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.tile dd {
+  margin: 0.25rem 0 0;
+  font: 600 1.75rem / 1.2 var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.tile--wide {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 1rem;
+}
+
+.card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.125rem;
+}
+
+.updated {
+  flex: 1 1 13rem;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  /* ให้ \n ในข้อความขึ้นบรรทัดใหม่จริง */
+  white-space: pre-line;
+}
+
+.credit {
+  margin-top: 0.25rem;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* จอกว้าง: การ์ดหลักสูงเต็มฝั่งซ้าย ส่วนกล่องเล็กอยู่ฝั่งขวา ใช้ rem เพื่อให้ขยายตัวอักษรแล้วกลับเป็น layout มือถือเอง */
+@media (min-width: 52rem) {
+  .app {
+    padding-top: 2rem;
+  }
+
+  .top {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .bento {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+  }
+
+  .hero {
+    grid-row: 1 / span 2;
+  }
+}
+
+/* ---------- ลูกเล่น ---------- */
+
+@keyframes float {
+  from {
+    transform: translateY(4%) rotate(-3deg);
+  }
+  to {
+    transform: translateY(-6%) rotate(3deg);
+  }
+}
+
+/* backwards: ใช้ค่าเริ่มต้นตอนรอ delay แต่พอจบแล้วปล่อยให้ hover ขยับกล่องได้ */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.hero,
+.tile,
+.card-footer {
+  animation: rise 0.6s var(--spring) backwards;
+  transition: transform 0.25s var(--spring);
+}
+
+.tile:nth-child(1) {
+  animation-delay: 0.06s;
+}
+
+.tile:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.tile:nth-child(3) {
+  animation-delay: 0.18s;
+}
+
+.tile:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+.card-footer {
+  animation-delay: 0.3s;
+}
+
+@media (hover: hover) {
+  .tile:hover {
+    transform: translateY(-3px) rotate(-0.5deg);
+  }
+
+  button:hover {
+    transform: translateY(-1px) scale(1.02);
+  }
+
+  button:active {
+    transform: scale(0.93);
+  }
+}
+
+/* คนที่ตั้งเครื่องให้ลดการเคลื่อนไหวอาจเวียนหัวจากอนิเมชัน จึงปิดทั้งหมด */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

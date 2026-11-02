@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>สภาพอากาศตอนนี้</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌤️</text></svg>"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600&family=Kanit:wght@600;800&display=swap"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="js/app.js"></script>
+  </head>
+  <body data-sky="neutral">
+    <div class="sky" aria-hidden="true"></div>
+
+    <main class="app">
+      <header class="top">
+        <h1>สภาพอากาศตอนนี้</h1>
+
+        <form id="search-form" class="search" role="search">
+          <label class="visually-hidden" for="search-input">ค้นหาเมือง</label>
+          <div class="search-row glass">
+            <input
+              id="search-input"
+              type="search"
+              placeholder="ค้นเมือง เช่น เชียงใหม่ หรือ Tokyo"
+              autocomplete="off"
+            />
+            <button type="submit">ค้นหา</button>
+          </div>
+        </form>
+
+        <button id="locate-button" class="chip glass" type="button">
+          <span aria-hidden="true">📍</span> ใช้ตำแหน่งของฉัน
+        </button>
+      </header>
+
+      <p id="search-status" class="note" role="status" hidden></p>
+      <ul id="search-results" class="results" hidden></ul>
+      <p id="weather-status" class="warning" role="status" hidden></p>
+
+      <section class="bento" aria-labelledby="place-name">
+        <div class="hero glass">
+          <div>
+            <h2 id="place-name" tabindex="-1">–</h2>
+            <p id="place-detail" class="soft"></p>
+          </div>
+          <span id="weather-icon" class="icon" aria-hidden="true"></span>
+          <div class="reading">
+            <p id="temperature" class="temperature">–</p>
+            <p id="condition" class="condition">กำลังโหลด…</p>
+          </div>
+        </div>
+
+        <dl class="details">
+          <div class="tile glass">
+            <dt><span aria-hidden="true">🌡️</span> รู้สึกเหมือน</dt>
+            <dd id="feels-like">–</dd>
+          </div>
+          <div class="tile glass">
+            <dt><span aria-hidden="true">💧</span> ความชื้น</dt>
+            <dd id="humidity">–</dd>
+          </div>
+          <div class="tile tile--wide glass">
+            <dt><span aria-hidden="true">💨</span> ลม</dt>
+            <dd id="wind">–</dd>
+          </div>
+          <div class="tile tile--wide glass">
+            <dt><span aria-hidden="true">🌧️</span> ฝน 15 นาทีล่าสุด</dt>
+            <dd id="precipitation">–</dd>
+          </div>
+        </dl>
+
+        <div class="card-footer glass">
+          <p id="updated" class="updated"></p>
+          <button id="refresh-button" type="button">
+            <span aria-hidden="true">↻</span> รีเฟรช
+          </button>
+        </div>
+      </section>
+
+      <p class="credit">
+        ข้อมูลจาก
+        <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a>
+        (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>)
+        · Location data based on
+        <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a>
+      </p>
+    </main>
+  </body>
+</html>
